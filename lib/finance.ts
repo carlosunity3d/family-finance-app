@@ -7,7 +7,7 @@ interface RawEntry {
 }
 
 export function calcStats(entry: RawEntry): MonthlyStats {
-  const savings = entry.income - entry.expenses
+  const savings = entry.income - entry.expenses + entry.investments
   const savingsPct = entry.income === 0 ? 0 : (savings / entry.income) * 100
   return {
     income: entry.income,

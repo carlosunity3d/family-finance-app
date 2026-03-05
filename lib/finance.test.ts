@@ -4,8 +4,8 @@ import type { MonthlyEntry } from './types'
 describe('calcStats', () => {
   it('computes savings and savingsPct', () => {
     const result = calcStats({ income: 5000, expenses: 3000, investments: 500 })
-    expect(result.savings).toBe(2000)
-    expect(result.savingsPct).toBeCloseTo(40)
+    expect(result.savings).toBe(2500)
+    expect(result.savingsPct).toBeCloseTo(50)
   })
 
   it('handles zero income without crashing', () => {
@@ -23,8 +23,8 @@ describe('calcFamily', () => {
     expect(family.income).toBe(8000)
     expect(family.expenses).toBe(5000)
     expect(family.investments).toBe(800)
-    expect(family.savings).toBe(3000)
-    expect(family.savingsPct).toBeCloseTo(37.5)
+    expect(family.savings).toBe(3800)
+    expect(family.savingsPct).toBeCloseTo(47.5)
   })
 })
 

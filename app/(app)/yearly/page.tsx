@@ -22,26 +22,48 @@ function sumStats(stats: (MonthlyStats | null)[]): MonthlyStats {
   const income = valid.reduce((s, v) => s + v.income, 0)
   const expenses = valid.reduce((s, v) => s + v.expenses, 0)
   const investments = valid.reduce((s, v) => s + v.investments, 0)
-  const savings = income - expenses
+  const savings = income - expenses + investments
   const savingsPct = income === 0 ? 0 : (savings / income) * 100
   return { income, expenses, investments, savings, savingsPct }
+}
+
+function StatCells({ stats }: { stats: MonthlyStats | null }) {
+  if (!stats) {
+    return <td className="px-3 py-2 text-center text-gray-300" colSpan={5}>—</td>
+  }
+  return (
+    <>
+      <td className="px-3 py-2 text-right text-sm">{fmt(stats.income)}</td>
+      <td className="px-3 py-2 text-right text-sm">{fmt(stats.expenses)}</td>
+      <td className="px-3 py-2 text-right text-sm">{fmt(stats.investments)}</td>
+      <td className="px-3 py-2 text-right text-sm">{fmt(stats.savings)}</td>
+      <td className="px-3 py-2 text-right text-sm">{pct(stats.savingsPct)}</td>
+    </>
+  )
 }
 
 export default function YearlySummaryPage() {
   const [year, setYear] = useState(new Date().getFullYear())
   const [entries, setEntries] = useState<MonthlyEntry[]>([])
   const [loading, setLoading] = useState(true)
+  const [fetchError, setFetchError] = useState<string | null>(null)
 
   useEffect(() => {
     async function fetchEntries() {
       setLoading(true)
       const supabase = createClient()
-      const { data } = await supabase
+      const { data, error: fetchErr } = await supabase
         .from('monthly_entry')
         .select('*')
         .gte('month', `${year}-01-01`)
         .lte('month', `${year}-12-31`)
         .order('month', { ascending: true })
+      if (fetchErr) {
+        setFetchError(fetchErr.message)
+        setLoading(false)
+        return
+      }
+      setFetchError(null)
       setEntries((data as MonthlyEntry[]) ?? [])
       setLoading(false)
     }
@@ -72,21 +94,6 @@ export default function YearlySummaryPage() {
       expenses: r.family!.expenses,
     }))
 
-  function StatCells({ stats }: { stats: MonthlyStats | null }) {
-    if (!stats) {
-      return <td className="px-3 py-2 text-center text-gray-300" colSpan={5}>—</td>
-    }
-    return (
-      <>
-        <td className="px-3 py-2 text-right text-sm">{fmt(stats.income)}</td>
-        <td className="px-3 py-2 text-right text-sm">{fmt(stats.expenses)}</td>
-        <td className="px-3 py-2 text-right text-sm">{fmt(stats.investments)}</td>
-        <td className="px-3 py-2 text-right text-sm">{fmt(stats.savings)}</td>
-        <td className="px-3 py-2 text-right text-sm">{pct(stats.savingsPct)}</td>
-      </>
-    )
-  }
-
   const colHeader = (label: string, key: string) => (
     <th key={key} className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">{label}</th>
   )
@@ -101,6 +108,7 @@ export default function YearlySummaryPage() {
         <button onClick={() => setYear(y => y + 1)} className="px-3 py-1 border border-gray-300 rounded-lg text-sm hover:bg-gray-100">Next →</button>
       </div>
 
+      {fetchError && <p className="text-red-500 text-sm">Failed to load data: {fetchError}</p>}
       {loading ? (
         <p className="text-gray-400">Loading...</p>
       ) : (

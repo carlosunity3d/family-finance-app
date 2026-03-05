@@ -23,17 +23,24 @@ export default function DashboardPage() {
   const [entries, setEntries] = useState<MonthlyEntry[]>([])
   const [editingPerson, setEditingPerson] = useState<Person | null>(null)
   const [loading, setLoading] = useState(true)
+  const [fetchError, setFetchError] = useState<string | null>(null)
 
   const fetchEntries = useCallback(async () => {
     setLoading(true)
     const supabase = createClient()
     const sixMonthsAgo = addMonths(currentMonth, -5)
-    const { data } = await supabase
+    const { data, error: fetchErr } = await supabase
       .from('monthly_entry')
       .select('*')
       .gte('month', `${sixMonthsAgo}-01`)
       .lte('month', `${currentMonth}-01`)
       .order('month', { ascending: true })
+    if (fetchErr) {
+      setFetchError(fetchErr.message)
+      setLoading(false)
+      return
+    }
+    setFetchError(null)
     setEntries((data as MonthlyEntry[]) ?? [])
     setLoading(false)
   }, [currentMonth])
@@ -58,8 +65,8 @@ export default function DashboardPage() {
     const c = getStats('carlos', m)
     const n = getStats('nicoletta', m)
     const fam = c && n ? calcFamily(c, n) : null
-    return { month: m, savingsPct: fam?.savingsPct ?? 0 }
-  }).filter(d => d.savingsPct > 0)
+    return fam ? { month: m, savingsPct: fam.savingsPct } : null
+  }).filter((d): d is { month: string; savingsPct: number } => d !== null)
 
   const editingEntry = editingPerson ? getEntry(editingPerson, currentMonth) : undefined
 
@@ -81,6 +88,7 @@ export default function DashboardPage() {
         </button>
       </div>
 
+      {fetchError && <p className="text-red-500 text-sm">Failed to load data: {fetchError}</p>}
       {loading ? (
         <p className="text-gray-400">Loading...</p>
       ) : (
