@@ -38,8 +38,8 @@ export default function StatsCard({ title, stats, onEdit, highlight }: Props) {
         <div>
           <Row label="Income" value={fmt(stats.income)} />
           <Row label="Expenses" value={fmt(stats.expenses)} />
-          <Row label="Investments" value={fmt(stats.investments)} />
           <Row label="Savings" value={fmt(stats.savings)} />
+          <Row label="Net" value={fmt(stats.net)} />
           <Row label="Savings %" value={`${stats.savingsPct.toFixed(1)}%`} />
         </div>
       ) : (

@@ -7,13 +7,14 @@ interface RawEntry {
 }
 
 export function calcStats(entry: RawEntry): MonthlyStats {
-  const savings = entry.income - entry.expenses + entry.investments
+  const savings = entry.investments
+  const net = entry.income - entry.expenses
   const savingsPct = entry.income === 0 ? 0 : (savings / entry.income) * 100
   return {
     income: entry.income,
     expenses: entry.expenses,
-    investments: entry.investments,
     savings,
+    net,
     savingsPct,
   }
 }
@@ -21,10 +22,10 @@ export function calcStats(entry: RawEntry): MonthlyStats {
 export function calcFamily(a: MonthlyStats, b: MonthlyStats): MonthlyStats {
   const income = a.income + b.income
   const expenses = a.expenses + b.expenses
-  const investments = a.investments + b.investments
   const savings = a.savings + b.savings
+  const net = income - expenses
   const savingsPct = income === 0 ? 0 : (savings / income) * 100
-  return { income, expenses, investments, savings, savingsPct }
+  return { income, expenses, savings, net, savingsPct }
 }
 
 export function toMonthData(entries: MonthlyEntry[], month: string): MonthData {

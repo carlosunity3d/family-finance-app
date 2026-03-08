@@ -2,15 +2,17 @@ import { calcStats, calcFamily, toMonthData } from './finance'
 import type { MonthlyEntry } from './types'
 
 describe('calcStats', () => {
-  it('computes savings and savingsPct', () => {
+  it('computes savings, net, and savingsPct', () => {
     const result = calcStats({ income: 5000, expenses: 3000, investments: 500 })
-    expect(result.savings).toBe(2500)
-    expect(result.savingsPct).toBeCloseTo(50)
+    expect(result.savings).toBe(500)
+    expect(result.net).toBe(2000)
+    expect(result.savingsPct).toBeCloseTo(10)
   })
 
   it('handles zero income without crashing', () => {
     const result = calcStats({ income: 0, expenses: 0, investments: 0 })
     expect(result.savings).toBe(0)
+    expect(result.net).toBe(0)
     expect(result.savingsPct).toBe(0)
   })
 })
@@ -22,9 +24,9 @@ describe('calcFamily', () => {
     const family = calcFamily(a, b)
     expect(family.income).toBe(8000)
     expect(family.expenses).toBe(5000)
-    expect(family.investments).toBe(800)
-    expect(family.savings).toBe(3800)
-    expect(family.savingsPct).toBeCloseTo(47.5)
+    expect(family.savings).toBe(800)
+    expect(family.net).toBe(3000)
+    expect(family.savingsPct).toBeCloseTo(10)
   })
 })
 
