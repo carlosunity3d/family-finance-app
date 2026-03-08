@@ -23,7 +23,7 @@ function sumStats(stats: (MonthlyStats | null)[]): MonthlyStats {
   const expenses = valid.reduce((s, v) => s + v.expenses, 0)
   const savings = valid.reduce((s, v) => s + v.savings, 0)
   const net = income - expenses
-  const savingsPct = income === 0 ? 0 : (savings / income) * 100
+  const savingsPct = income === 0 ? 0 : (net / income) * 100
   return { income, expenses, savings, net, savingsPct }
 }
 

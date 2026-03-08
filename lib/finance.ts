@@ -9,7 +9,7 @@ interface RawEntry {
 export function calcStats(entry: RawEntry): MonthlyStats {
   const savings = entry.investments
   const net = entry.income - entry.expenses
-  const savingsPct = entry.income === 0 ? 0 : (savings / entry.income) * 100
+  const savingsPct = entry.income === 0 ? 0 : (net / entry.income) * 100
   return {
     income: entry.income,
     expenses: entry.expenses,
@@ -24,7 +24,7 @@ export function calcFamily(a: MonthlyStats, b: MonthlyStats): MonthlyStats {
   const expenses = a.expenses + b.expenses
   const savings = a.savings + b.savings
   const net = income - expenses
-  const savingsPct = income === 0 ? 0 : (savings / income) * 100
+  const savingsPct = income === 0 ? 0 : (net / income) * 100
   return { income, expenses, savings, net, savingsPct }
 }
 

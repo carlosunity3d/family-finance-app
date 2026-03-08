@@ -16,7 +16,7 @@ export default function SavingsChart({ data }: { data: DataPoint[] }) {
         <LineChart data={data}>
           <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
           <XAxis dataKey="month" tick={{ fontSize: 12 }} />
-          <YAxis unit="%" tick={{ fontSize: 12 }} domain={[0, 100]} />
+          <YAxis unit="%" tick={{ fontSize: 12 }} />
           <Tooltip formatter={(v: number | undefined) => v != null ? `${v.toFixed(1)}%` : ''} />
           <Line type="monotone" dataKey="savingsPct" stroke="#2563eb" strokeWidth={2} dot />
         </LineChart>
