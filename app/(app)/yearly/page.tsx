@@ -21,10 +21,10 @@ function sumStats(stats: (MonthlyStats | null)[]): MonthlyStats {
   const valid = stats.filter(Boolean) as MonthlyStats[]
   const income = valid.reduce((s, v) => s + v.income, 0)
   const expenses = valid.reduce((s, v) => s + v.expenses, 0)
-  const savings = valid.reduce((s, v) => s + v.savings, 0)
+  const investments = valid.reduce((s, v) => s + v.investments, 0)
   const net = income - expenses
   const savingsPct = income === 0 ? 0 : (net / income) * 100
-  return { income, expenses, savings, net, savingsPct }
+  return { income, expenses, investments, net, savingsPct }
 }
 
 function StatCells({ stats }: { stats: MonthlyStats | null }) {
@@ -35,7 +35,7 @@ function StatCells({ stats }: { stats: MonthlyStats | null }) {
     <>
       <td className="px-3 py-2 text-right text-sm">{fmt(stats.income)}</td>
       <td className="px-3 py-2 text-right text-sm">{fmt(stats.expenses)}</td>
-      <td className="px-3 py-2 text-right text-sm">{fmt(stats.savings)}</td>
+      <td className="px-3 py-2 text-right text-sm">{fmt(stats.investments)}</td>
       <td className="px-3 py-2 text-right text-sm">{fmt(stats.net)}</td>
       <td className="px-3 py-2 text-right text-sm">{pct(stats.savingsPct)}</td>
     </>
@@ -98,7 +98,7 @@ export default function YearlySummaryPage() {
     <th key={key} className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">{label}</th>
   )
 
-  const subHeaders = ['Income', 'Expenses', 'Savings', 'Net', 'Sav%']
+  const subHeaders = ['Income', 'Expenses', 'Inv.', 'Net', 'Sav%']
 
   return (
     <div className="space-y-6">

@@ -13,7 +13,7 @@ export interface MonthlyEntry {
 export interface MonthlyStats {
   income: number
   expenses: number
-  savings: number
+  investments: number
   net: number
   savingsPct: number
 }
