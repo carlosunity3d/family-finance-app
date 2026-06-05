@@ -16,7 +16,6 @@ export default function EntryForm({ person, month, existing, onSaved, onCancel }
   const monthDate = `${month}-01`
   const [income, setIncome] = useState(existing?.income.toString() ?? '')
   const [expenses, setExpenses] = useState(existing?.expenses.toString() ?? '')
-  const [investments, setInvestments] = useState(existing?.investments.toString() ?? '')
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
 
@@ -31,7 +30,6 @@ export default function EntryForm({ person, month, existing, onSaved, onCancel }
       month: monthDate,
       income: parseFloat(income),
       expenses: parseFloat(expenses),
-      investments: parseFloat(investments),
     }
 
     let result
@@ -64,7 +62,6 @@ export default function EntryForm({ person, month, existing, onSaved, onCancel }
           {[
             { label: 'Income', value: income, set: setIncome, id: 'income' },
             { label: 'Expenses', value: expenses, set: setExpenses, id: 'expenses' },
-            { label: 'Investments', value: investments, set: setInvestments, id: 'investments' },
           ].map(({ label, value, set, id }) => (
             <div key={label}>
               <label htmlFor={id} className="block text-sm font-medium text-gray-700 mb-1">{label}</label>

@@ -21,21 +21,19 @@ function sumStats(stats: (MonthlyStats | null)[]): MonthlyStats {
   const valid = stats.filter(Boolean) as MonthlyStats[]
   const income = valid.reduce((s, v) => s + v.income, 0)
   const expenses = valid.reduce((s, v) => s + v.expenses, 0)
-  const investments = valid.reduce((s, v) => s + v.investments, 0)
   const net = income - expenses
   const savingsPct = income === 0 ? 0 : (net / income) * 100
-  return { income, expenses, investments, net, savingsPct }
+  return { income, expenses, net, savingsPct }
 }
 
 function StatCells({ stats }: { stats: MonthlyStats | null }) {
   if (!stats) {
-    return <td className="px-3 py-2 text-center text-gray-300" colSpan={5}>—</td>
+    return <td className="px-3 py-2 text-center text-gray-300" colSpan={4}>—</td>
   }
   return (
     <>
       <td className="px-3 py-2 text-right text-sm">{fmt(stats.income)}</td>
       <td className="px-3 py-2 text-right text-sm">{fmt(stats.expenses)}</td>
-      <td className="px-3 py-2 text-right text-sm">{fmt(stats.investments)}</td>
       <td className="px-3 py-2 text-right text-sm">{fmt(stats.net)}</td>
       <td className="px-3 py-2 text-right text-sm">{pct(stats.savingsPct)}</td>
     </>
@@ -98,7 +96,7 @@ export default function YearlySummaryPage() {
     <th key={key} className="px-3 py-2 text-right text-xs font-medium text-gray-500 uppercase">{label}</th>
   )
 
-  const subHeaders = ['Income', 'Expenses', 'Inv.', 'Net', 'Sav%']
+  const subHeaders = ['Income', 'Expenses', 'Net', 'Sav%']
 
   return (
     <div className="space-y-6">
@@ -118,9 +116,9 @@ export default function YearlySummaryPage() {
               <thead className="bg-gray-50">
                 <tr>
                   <th className="px-3 py-2 text-left text-xs font-medium text-gray-500 uppercase">Month</th>
-                  <th className="px-3 py-2 text-center text-xs font-semibold text-blue-600 uppercase" colSpan={5}>Carlos</th>
-                  <th className="px-3 py-2 text-center text-xs font-semibold text-purple-600 uppercase" colSpan={5}>Nicoletta</th>
-                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 uppercase" colSpan={5}>Family</th>
+                  <th className="px-3 py-2 text-center text-xs font-semibold text-blue-600 uppercase" colSpan={4}>Carlos</th>
+                  <th className="px-3 py-2 text-center text-xs font-semibold text-purple-600 uppercase" colSpan={4}>Nicoletta</th>
+                  <th className="px-3 py-2 text-center text-xs font-semibold text-gray-700 uppercase" colSpan={4}>Family</th>
                 </tr>
                 <tr className="border-t border-gray-200">
                   <th />
