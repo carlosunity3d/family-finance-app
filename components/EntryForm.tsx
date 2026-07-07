@@ -30,6 +30,7 @@ export default function EntryForm({ person, month, existing, onSaved, onCancel }
       month: monthDate,
       income: parseFloat(income),
       expenses: parseFloat(expenses),
+      investments: 0,
     }
 
     let result
